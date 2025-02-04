@@ -1,5 +1,5 @@
 import "./TodoItem.css";
-
+import {memo} from 'react';
 const TodoItem = ({
   id,
   isDone,
@@ -33,4 +33,16 @@ const TodoItem = ({
   );
 };
 
-export default TodoItem;
+// 고차 컴포넌트 (HDC)
+export default memo(TodoItem, (prevProps, nextProps) => {
+  // 반환값에 따라 Props 가 바뀌었는지 안 바뀌었는지 판단
+  // true 반환 시 Props 바뀌지 않음 -> 리렌더링 x 
+  // false 반환 시 Props 바뀜 -> 리렌더링 o 
+
+  if(prevProps.id !== nextProps.id) return false;
+  if(prevProps.isDone !== nextProps.isDone) return false;
+  if(prevProps.content !== nextProps.content) return false;
+  if(prevProps.date !== nextProps.date) return false;
+  
+  return true;
+});
