@@ -1,5 +1,5 @@
 import './App.css'
-import { useReducer , useRef, createContext} from 'react';
+import { useState,useReducer , useRef, createContext, useEffect} from 'react';
 import { Routes, Route} from "react-router-dom";
 import Home from "./pages/Home";
 import New from "./pages/New";
@@ -32,27 +32,76 @@ const mockData = [
 ]
 
 function reducer(state , action) {
+  let nextState;
   switch(action.type){
+    case "INIT":
+      return action.data;
     case "CREATE" : 
-      return [action.data, ...state];
+      {
+        nextState = [action.data, ...state];
+        break;
+      }
     case "UPDATE" : 
-      return state.map((item) => 
-        item.id === action.data.id 
-        ? action.data 
-        : item
-      );
+      {
+        nextState = state.map((item) => 
+          item.id === action.data.id 
+          ? action.data 
+          : item
+        );
+        break;
+      }
     case "DELETE" :
-      return state.filter((item) => 
-        String(item.id) 
+      {
+        nextState = state.filter((item) => 
+          String(item.id) 
         !== String(action.id));
-  }
+        break;
+      }
+    }
+    localStorage.setItem("diary",JSON.stringify(nextState));
+    return nextState;
 }
 
 export const DiaryStateContext = createContext();
 export const DiaryDispatchContext = createContext();
 function App() {
-  const [data, dispatch] = useReducer(reducer , mockData);
-  const idRef = useRef(3);
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, dispatch] = useReducer(reducer , []);
+  const idRef = useRef(0);
+
+  useEffect ( () => {
+    const storedData = localStorage.getItem("diary");
+    if(!storedData){
+      return;
+    }
+    const parsedData = JSON.parse(storedData);
+
+    if(!Array.isArray(parsedData)){
+      setIsLoading(false);
+      return;
+    }
+
+    let maxId = 0;
+    parsedData.forEach((item) => {
+      if(Number(item.id) > maxId){
+        maxId = Number(item.id)
+      }
+    })
+
+    idRef.current = maxId + 1;
+
+    dispatch({
+      type:'INIT',
+      data : parsedData,
+    });
+    setIsLoading(false);
+  },[])
+
+  // 숫자 , 문자값만 넣을 수 있음 (원시값, 실제 들어갈 값)
+  //localStorage.setItem("test","hello");
+  //localStorage.setItem('person',JSON.stringify({name : '가나다'}));
+  //console.log(JSON.parse(localStorage.getItem('person')));
+
 
   // 새로운 일기 추가
   const onCreate = (createdDate, emotionId, content) => {
@@ -91,6 +140,9 @@ function App() {
     });
   }
 
+  if(isLoading){
+    return <div> 데이터 로딩중입니다.</div>
+  }
   return (
     <>
 
