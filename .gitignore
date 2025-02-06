@@ -1,0 +1,13 @@
+
+# macOS 자동 생성 파일 무시 
+.DS_store
+
+# Node.js 프로젝트 불필요한 폴더 무시 
+node_modules/
+
+# 환경 변수 파일 무시 
+.env
+
+# 빌드 결과물 무시 
+dist/
+build/
