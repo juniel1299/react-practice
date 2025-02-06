@@ -27,7 +27,7 @@ const New = () => {
                 title={"새 일기 쓰기"}
                 leftChild={
                 <Button 
-                    onCLick={ () => nav(-1) }
+                    onClick={() => nav(-1)}
                     text={"< 뒤로 가기"}
                 />}
             />
