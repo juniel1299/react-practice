@@ -46,6 +46,11 @@ function Register() {
           placeholder="비밀번호"
           value={loginPassword}
           onChange={(e) => setLoginPassword(e.target.value)}
+          onKeyDown={(e) => {
+            if(e.key === 'Enter'){
+                handleRegister();
+            }
+        }}
         />
         <button onClick={handleRegister}>회원가입</button>
       </div>

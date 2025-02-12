@@ -45,6 +45,11 @@ const Login = () => {
                     placeholder="비밀번호"
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
+                    onKeyDown={(e) => {
+                        if(e.key === 'Enter'){
+                            handleLogin();
+                        }
+                    }}
                 />
                 <button 
                     onClick={handleLogin}

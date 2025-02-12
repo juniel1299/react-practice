@@ -10,7 +10,7 @@ export const getPopularMovies = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/movie/popular`, {
       params: {
-        api_key: API_KEY, // ✅ API 키 포함 확인
+        api_key: API_KEY, // API 키 포함 확인
         language: "ko-KR",
         page: 1,
       },
@@ -26,7 +26,7 @@ export const getMovieDetails = async (movieId) => {
   try {
     const response = await axios.get(`${BASE_URL}/movie/${movieId}`, {
       params: {
-        api_key: API_KEY, // ✅ API 키 포함 확인
+        api_key: API_KEY, // API 키 포함 확인
         language: "ko-KR",
       },
     });
