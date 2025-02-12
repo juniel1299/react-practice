@@ -1,0 +1,32 @@
+.Header{
+    display:flex;
+    justify-content: space-between;
+}
+
+.Header .Menu-icon {
+    content:url('../assets/menu-icon.png');
+    width:15px;
+    cursor: pointer;
+}
+
+.Menu-icon:hover {
+    background-color: #efefef;
+    padding:1px;
+    padding-right:0px;
+}
+
+.Header .Center-header {
+    cursor: pointer;
+}
+
+.Center-header:hover {
+    background-color: #efefef;
+}
+
+.Header .Right-header {
+    cursor: pointer;
+}
+
+.Right-header:hover {
+    background-color: #efefef;
+}

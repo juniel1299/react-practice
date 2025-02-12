@@ -1,0 +1,15 @@
+.Login {
+    display:flex;
+    gap:10px;
+    margin-top:30px;
+    justify-content: flex-end;
+    align-items: self-end;
+}
+.Login input{
+    width:100px;
+}
+
+.Register-Button {
+    display: flex;
+    margin: 120px auto;
+}
