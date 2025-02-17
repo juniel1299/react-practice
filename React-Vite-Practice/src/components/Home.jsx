@@ -5,12 +5,16 @@ import Search from "./Search"
 const Home = () => {
 
     const [searchTerm, setSearchTerm] = useState("");
+    
+    const [favoriteMark, setFavoriteMark] = useState("");
+    const [totalCount, setTotalCount] = useState(0);
+
 
     return (
         <div>
             <Header/>
-            <Search setSearchTerm={setSearchTerm}/>
-            <List searchTerm={searchTerm}/>
+            <Search setSearchTerm={setSearchTerm} totalCount={totalCount}/>
+            <List searchTerm={searchTerm} setTotalCount={setTotalCount}/>
         </div>
     )
 }

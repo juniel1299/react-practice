@@ -13,6 +13,10 @@ const Login = () => {
         nav('/register')
     }
 
+    const onClickIdSearch = () => {
+        nav('/searchPassword')
+    }
+
 
     // 로그인 버튼 
     const handleLogin = () => {
@@ -56,6 +60,7 @@ const Login = () => {
                 >로그인</button>
             </div>
             <button className="Register-Button" onClick={onClickRegister}>회원가입</button>
+            <button className="ID-Search-Button" onClick={onClickIdSearch}>비밀번호 찾기</button>
         </div>
     )
 }
