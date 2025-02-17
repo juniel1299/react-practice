@@ -29,12 +29,17 @@ function List({ searchTerm , setTotalCount}) {
   // 검색어 필터링
   const filteredMovies = Array.isArray(movies) ? movies.filter((movie) =>
         movie.title?.toLowerCase().includes((searchTerm || "").toLowerCase())
-      )
-    : [];
+  )
+  : [];
 
     useEffect(() => {
       setTotalCount(filteredMovies.length);
     }, [filteredMovies, setTotalCount]);
+
+    const onClickNaver = (movieTitle) => {
+      const query = encodeURIComponent(movieTitle);
+      window.open(`https://search.naver.com/search.naver?query=${query}`, '_blank');
+    };
   
   // UI 
   return (
@@ -54,7 +59,7 @@ function List({ searchTerm , setTotalCount}) {
               />
               <h3>
                 {movie.title || '제목 없음'} 
-                <button className="favorite">즐겨찾기</button>
+                <button className="searchNaver" onClick={() => onClickNaver(movie.title)}>검색</button>
               </h3>
               <p>{movie.vote_average ?? '평점 없음'} / 10</p>
             </div>

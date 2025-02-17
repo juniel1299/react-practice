@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './SearchPassword.css';
 import { useNavigate } from 'react-router-dom';
+import Header from './Header';
 
 const SearchPassword = () => {
     const [loginId, setLoginId] = useState('');
@@ -29,6 +30,7 @@ const SearchPassword = () => {
     return (
         <div>
             <h2>비밀번호 찾기</h2>
+            <Header/>
             <input
                 type="text"
                 placeholder="아이디를 입력하세요"
@@ -55,7 +57,7 @@ const SearchPassword = () => {
                 </div>
             )}
             <button onClick={onClickHome}>
-                뒤로가기
+                초기화면
             </button>
         </div>
     );
