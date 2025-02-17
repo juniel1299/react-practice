@@ -2,8 +2,8 @@
 
 const promise = new Promise<number>((resolve, reject) => {
     setTimeout(() => {
-        //resolve(20);    // 성공 결과 값
-        reject('실패');    // 실패 결과 값
+        resolve(20);    // 성공 결과 값
+        //reject('실패');    // 실패 결과 값
     },3000);              //몇 초 후 (ms)
 })
 
