@@ -29,8 +29,8 @@ const SearchPassword = () => {
 
     return (
         <div>
-            <h2>비밀번호 찾기</h2>
             <Header/>
+            <h2>비밀번호 찾기</h2>
             <input
                 type="text"
                 placeholder="아이디를 입력하세요"

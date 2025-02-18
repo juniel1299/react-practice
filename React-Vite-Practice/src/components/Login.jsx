@@ -7,6 +7,7 @@ const Login = () => {
     const [loginId, setLoginId] = useState();
     const [loginPassword, setLoginPassword] = useState();
     const nav = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
 
     //회원가입 화면 이동
     const onClickRegister = () => {
@@ -32,12 +33,19 @@ const Login = () => {
             alert("아이디 또는 비밀번호가 잘못되었습니다.");
           }
     };
+
+    // 비밀번호 보이게 / 안 보이게 
+    const togglePasswordVisibility = () => {
+        setShowPassword((prev) => !prev);
+    };
+
     return (
         <div>
         <Header/>
             <div className="Login">
                 아이디
                 <input
+                    className="textInput"
                     type="text"
                     placeholder="아이디"
                     value={loginId}
@@ -45,7 +53,8 @@ const Login = () => {
                 />
                 비밀번호
                 <input 
-                    type="password"
+                    className="textInput"
+                    type={showPassword ? "text" : "password"}
                     placeholder="비밀번호"
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
@@ -58,6 +67,16 @@ const Login = () => {
                 <button 
                     onClick={handleLogin}
                 >로그인</button>
+                <div className="password-toggle">
+                    <input
+                        className="checkbox"
+                        type="checkbox"
+                        checked={showPassword}
+                        onChange={togglePasswordVisibility}
+                        id="showPassword"
+                    />
+                    <label htmlFor="showPassword">비밀번호 표시</label>
+                </div>
             </div>
             <button className="Register-Button" onClick={onClickRegister}>회원가입</button>
             <button className="ID-Search-Button" onClick={onClickIdSearch}>비밀번호 찾기</button>
