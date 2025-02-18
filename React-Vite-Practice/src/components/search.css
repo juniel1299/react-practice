@@ -14,3 +14,9 @@
 .Search button:hover {
     background-color: #efefef;
 }
+
+.result-count{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}

@@ -25,7 +25,7 @@ const Search = ({ setSearchTerm, totalCount }) => {
             <button onClick={onClickSubmit}>확인</button>
 
             <div className="result-count">
-                총 {totalCount}개의 작품이 존재합니다.
+                총 {totalCount}개
             </div>
         </div>
     );

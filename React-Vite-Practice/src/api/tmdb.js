@@ -5,19 +5,37 @@ const BASE_URL = "https://api.themoviedb.org/3";
 // API 키 확인
 console.log("현재 API_KEY:", API_KEY);
 
-// List 화면
+// List 화면 (인기)
 export const getPopularMovies = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/movie/popular`, {
       params: {
-        api_key: API_KEY, // API 키 포함 확인
+        api_key: API_KEY,
         language: "ko-KR",
         page: 1,
       },
     });
     return response.data.results;
   } catch (error) {
-    console.error("오류 발생:", error);
+    console.error(" 인기 영화 데이터를 가져오는 중 오류:", error);
+    return [];
+  }
+};
+
+//최신
+export const getNowPlayingMovies = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/movie/now_playing`, {
+      params: {
+        api_key: API_KEY,
+        language: "ko-KR",
+        page: 1,
+        region: "KR",
+      },
+    });
+    return response.data.results;
+  } catch (error) {
+    console.error(" 최신 영화 데이터를 가져오는 중 오류:", error);
     return [];
   }
 };
