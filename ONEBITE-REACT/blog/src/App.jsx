@@ -1,13 +1,11 @@
-import { useRef, useState } from 'react'
 import './App.css'
-import Profile from './components/Profile'
-import InputText from './components/InputText'
+import Exam from './components/Exam'
 function App() {
 
 
   return (
     <div>
-      <InputText/>
+      <Exam/>
     </div>
   )
 }
