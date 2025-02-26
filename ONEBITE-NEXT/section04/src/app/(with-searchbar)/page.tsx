@@ -3,9 +3,13 @@ import style from "./page.module.css";
 import books from "@/mock/books.json";
 import { BookData } from "@/types";
 
+// 특정 페이지의 유형을 강제로 static , dynamic 적용함.
+//auto , force-dynamic , force-static , error
+// export const dynamic = ''
+
 async function AllBooks(){
   
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`,{cache:"force-cache"});
   if(!response.ok){
     return <div>오류 발생</div>
   }
@@ -18,7 +22,7 @@ async function AllBooks(){
 }
 
 async function RecoBooks(){
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/random`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/random`,{next:{revalidate : 3}});
   if(!response.ok){
     return <div>오류 발생</div>
   }
