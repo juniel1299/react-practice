@@ -30,3 +30,38 @@
 .Right-header:hover {
     background-color: #efefef;
 }
+
+/* 메뉴 스타일 */
+.Menu {
+    position: absolute;
+    top: 50px; /* 헤더 아래 위치 */
+    left: 10px;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 10px;
+    width: 150px;
+    z-index: 1000;
+}
+
+.Menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.Menu li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.Menu li:hover {
+    background: #f1f1f1;
+}
+
+/* 메뉴 아이콘 스타일 */
+.Menu-icon {
+    font-size: 24px;
+    cursor: pointer;
+}
