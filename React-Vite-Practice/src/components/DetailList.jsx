@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getMovieDetails } from "../api/tmdb";
 import './DetailList.css';
 import Header from "./Header";
+import Comment from "./Comment";
 function DetailList() {
   const { id } = useParams(); // URL에서 영화 ID 가져오기
   const [movie, setMovie] = useState(null);
@@ -25,6 +26,7 @@ function DetailList() {
       <p>개봉일: {movie.release_date}</p>
       <p>평점: {movie.vote_average} / 10</p>
       <p className="content">줄거리: {movie.overview}</p>
+      <Comment/>
     </div>
   );
 }
