@@ -1,25 +1,38 @@
 import { notFound } from "next/navigation";
 import style from "./page.module.css";
-import { createReviewAction } from "@/actions/create-review.action";
+import { ReviewData } from "@/types";
+import ReviewItem from "@/app/components/review-item";
+import ReviewEditor from "@/app/components/review-editor";
 
-//export const dynamicParams = false;
+// export const dynamicParams = false;
+export function generateStaticParams() {
+  return [{ id: "1" }, { id: "2" }, { id: "3" }];
+}
 
-// export function generateStaticParams(){
-//   return [{id:'1'},{id:'2'},{id:'3'}];
-// }
+async function BookDetail({ bookId }: { bookId: string }) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${bookId}`,
+    { cache: "force-cache" }
+  );
 
-async function BookDetail({bookId}:{bookId:string}){
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${bookId}`);
-  const  book = await response.json();
-  const { id, title, subTitle, description, author, publisher, coverImgUrl } = book;
-
-  if(!response.ok){
-    if(response.status === 404){
+  if (!response.ok) {
+    if (response.status === 404) {
       notFound();
     }
-    return <div>에러 발생</div>
+    return <div>오류가 발생했습니다...</div>;
   }
 
+  const book = await response.json();
+
+  const {
+    id,
+    title,
+    subTitle,
+    description,
+    author,
+    publisher,
+    coverImgUrl,
+  } = book;
 
   return (
     <section>
@@ -39,27 +52,33 @@ async function BookDetail({bookId}:{bookId:string}){
   );
 }
 
-function ReviewEditor({bookId}:{bookId:string}){
+async function ReviewList({ bookId }: { bookId: string }) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review/book/${bookId}`,
+    { next: { tags: [`review-${bookId}`] } }
+  );
 
+  if (!response.ok) {
+    throw new Error(`Review fetch failed : ${response.statusText}`);
+  }
 
-  return(
+  const reviews: ReviewData[] = await response.json();
+
+  return (
     <section>
-      <form action={createReviewAction}>
-        <input name="bookId" value={bookId} type="hidden"/>
-        <input required name="content" placeholder="리뷰 내용" />
-        <input required name="author" placeholder="작성자" />
-        <button type="submit">작성하기</button>
-      </form>
+      {reviews.map((review) => (
+        <ReviewItem key={`review-item-${review.id}`} {...review} />
+      ))}
     </section>
-  )
+  );
 }
 
-export default async function Page({ params, }: { params: { id: string } }) {
-  return(
+export default function Page({ params }: { params: { id: string } }) {
+  return (
     <div className={style.container}>
-      <BookDetail bookId={params.id}/>
-      <ReviewEditor bookId={params.id}/>
+      <BookDetail bookId={params.id} />
+      <ReviewEditor bookId={params.id} />
+      <ReviewList bookId={params.id} />
     </div>
-  )
-
+  );
 }
