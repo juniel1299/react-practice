@@ -54,3 +54,21 @@ export const getMovieDetails = async (movieId) => {
     return null;
   }
 };
+
+export const getKoreanMovies = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/discover/movie`, {
+      params: {
+        api_key: API_KEY,
+        language: "ko-KR", // 한국어 제목 가져오기
+        page: 1,
+        with_origin_country: "KR", //  제작 국가가 한국(KR)인 영화만 가져오기
+        include_adult : false,
+      },
+    });
+    return response.data.results;
+  } catch (error) {
+    console.error("한국 영화 데이터를 가져오는 중 오류 발생:", error);
+    return [];
+  }
+};
