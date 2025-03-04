@@ -48,13 +48,12 @@ const Header = () => {
                 {isLogin ? "로그아웃" : "로그인"}
             </div>
 
-            {/* 메뉴 UI 추가 */}
             {isMenuOpen && (
                 <div className="Menu">
                     <ul>
-                        <li onClick={useHome}>🏠 홈</li>
-                        <li onClick={() => nav('/profile')}>👤 내 프로필</li>
-                        <li onClick={() => nav('/settings')}>⚙️ 설정</li>
+                        <li onClick={useHome}>홈</li>
+                        <li onClick={() => nav('/profile')}>내 프로필</li>
+                        <li onClick={() => nav('/settings')}>설정</li>
                     </ul>
                 </div>
             )}

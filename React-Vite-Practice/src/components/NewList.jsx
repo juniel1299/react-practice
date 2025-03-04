@@ -58,7 +58,7 @@ function NewList({ searchTerm, setTotalCount }) {
           </div>
         ))
       ) : (
-        <p>최신 영화를 가져오는 중입니다.</p>
+        <p>영화가 없습니다..</p>
       )}
     </div>
   );
