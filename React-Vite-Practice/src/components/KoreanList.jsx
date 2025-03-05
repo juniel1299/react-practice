@@ -38,7 +38,7 @@ function KoreanList({ searchTerm, setTotalCount }){
             <img
               src={movie.poster_path 
                 ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` 
-                : 'https://via.placeholder.com/500x750?text=No+Image'}
+                : '이미지가 없습니다.'}
               alt={movie.title || '제목 없음'}
               style={{ width: "100%", borderRadius: "10px" }}
               onClick={() => navigate(`/movie/${movie.id}`)}

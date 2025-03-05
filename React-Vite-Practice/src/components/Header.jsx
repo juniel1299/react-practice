@@ -51,9 +51,8 @@ const Header = () => {
             {isMenuOpen && (
                 <div className="Menu">
                     <ul>
-                        <li onClick={useHome}>홈</li>
                         <li onClick={() => nav('/profile')}>내 프로필</li>
-                        <li onClick={() => nav('/settings')}>설정</li>
+                        <li onClick={() => nav('/setting')}>설정</li>
                     </ul>
                 </div>
             )}

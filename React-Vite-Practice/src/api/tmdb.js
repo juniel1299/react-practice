@@ -3,7 +3,7 @@ const API_KEY = import.meta.env.VITE_TMDB_API_KEY; // 환경 변수에서 API �
 const BASE_URL = "https://api.themoviedb.org/3";
 
 // API 키 확인
-console.log("현재 API_KEY:", API_KEY);
+//console.log("현재 API_KEY:", API_KEY);
 
 // List 화면 (인기)
 export const getPopularMovies = async () => {
