@@ -1,21 +1,39 @@
 import { useEffect, useState } from "react";
 import { getCurrentWeather } from "../api/weather";
 
-const Weather = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+interface WeatherProps {
+  search: string;
+}
+
+const Weather: React.FC<WeatherProps> = ({ search }) => {
   const [weather, setWeather] = useState<any>(null);
-  const CITY = "Seoul"; // 기본 도시 설정
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchWeather = async () => {
-      const data = await getCurrentWeather(CITY);
-      setWeather(data);
+      if (!search) return; 
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const data = await getCurrentWeather(search);
+        setWeather(data);
+      } catch (err) {
+        setError("날씨 정보를 불러올 수 없습니다. 올바른 도시 이름을 입력하세요.");
+        setWeather(null);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchWeather();
-  }, []);
+  }, [search]); // 🔹 search 값이 변경될 때마다 실행
 
-  if (!weather) return <p>⏳ 날씨 정보를 불러오는 중...</p>;
+  if (loading) return <p>⏳ 날씨 정보를 불러오는 중...</p>;
+  if (error) return <p>{error}</p>;
+  if (!weather) return <p>🔍 도시 이름을 입력해 주세요.</p>;
 
   return (
     <div>

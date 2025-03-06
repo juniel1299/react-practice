@@ -1,31 +1,32 @@
-import { useState } from "react";
-import './search.css';
+import React, { useState } from "react";
 
-const Search = () =>{
-    const [search, setSearch] = useState<string>("");
-    const onChangeSearch = (search: string) => {
-        setSearch(search);
-    }
-    const onClickSearch = () => {
-        console.log(search);
-    }
-
-    return (
-        <>
-            <div className="search-bar">
-                <input 
-                    type="text" 
-                    onChange={(e) => onChangeSearch(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            onClickSearch();
-                        }
-                    }}
-                    value={search}
-                 />
-                <button onClick={onClickSearch}>검색</button>
-            </div>
-        </>
-    )
+interface SearchProps {
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
 }
+
+const Search: React.FC<SearchProps> = ({ setSearch }) => {
+  const [input, setInput] = useState<string>(""); 
+
+  const onClickSubmit = () => {
+    setSearch(input); 
+  };
+
+  return (
+    <>
+      <input
+        type="text"
+        placeholder="도시 이름을 입력하세요"
+        value={input}
+        onChange={(e) => setInput(e.target.value)} 
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onClickSubmit();
+          }
+        }}
+      />
+      <button onClick={onClickSubmit}>검색</button>
+    </>
+  );
+};
+
 export default Search;
