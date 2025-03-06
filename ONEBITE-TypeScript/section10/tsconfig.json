@@ -5,10 +5,10 @@
         "outDir": "dist",
         "strict": true,
         "moduleDetection": "force",
-        "allowJs": true, // 자바스크립트 허용
+		"skipLibCheck": true,
     },
     "ts-node": {
-        "esm": true,
+        "esm": true
     },
-    "include": ["src"],
+    "include": ["src"]
 }
