@@ -1,0 +1,9 @@
+.search-bar{
+    display:flex;
+    flex:1;
+    gap:10px;
+    justify-content: center;
+}
+.search-bar input{
+    flex:1;
+}
