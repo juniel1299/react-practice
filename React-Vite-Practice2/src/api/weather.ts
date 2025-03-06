@@ -17,6 +17,7 @@ export const getCurrentWeather = async (city: string) => {
     return response.data;
   } catch (error) {
     console.error("현재 날씨 데이터를 가져오는 중 오류 발생:", error);
+    alert('존재하지 않는 도시입니다.')
     return null;
   }
 };
