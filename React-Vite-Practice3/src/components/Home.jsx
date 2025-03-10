@@ -1,19 +1,19 @@
 import { useState } from "react";
 import Header from "./Header";
-import List from "./List";
 import Search from "./Search";
+import List from "./List";
 
 const Home = () => {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [totalCount, setTotalCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [totalCount, setTotalCount] = useState(0);
 
-    return (
-        <div>
-            <Header />
-            <Search setSearchTerm={setSearchTerm} totalCount={totalCount} />
-            <List searchTerm={searchTerm} setTotalCount={setTotalCount} />
-        </div>
-    );
-}
+  return (
+    <div>
+      <Header />
+      <Search setSearchTerm={setSearchTerm} totalCount={totalCount} />
+      <List searchTerm={searchTerm} setTotalCount={setTotalCount} />
+    </div>
+  );
+};
 
 export default Home;
