@@ -4,7 +4,7 @@ import "./search.css";
 const Search = ({ setSearchTerm, totalCount }) => {
   const [inputValue, setInputValue] = useState("");
 
-  // 🔍 검색어 제출 함수
+  // 검색어 제출 함수
   const onClickSubmit = () => {
     setSearchTerm(inputValue);
   };
