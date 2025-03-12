@@ -4,7 +4,7 @@ ONEBITE-NEXT : 한 입 크기로 잘라 먹는 Next.js  (인프런)
   
   
 (Practice 붙은건 공부용 프로젝트)  
-React-Vite-Practice : js + vite + react  (tmdb API)
+React-Vite-Practice : js + vite + react  (tmdb API)  
 React-Vite-Practice2 : ts + vite + react  (openWeather API)  
 React-Vite-Practice3 : js + vite + react + redux  (tmdb API)
   
