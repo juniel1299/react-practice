@@ -58,9 +58,9 @@ function AgeCalculator() {
 
       {ages && (
         <div className="space-y-1 mt-4">
-          <div>👴 한국 나이: <strong>{ages.koreanAge}세</strong></div>
-          <div>🧑 만나이: <strong>{ages.internationalAge}세</strong></div>
-          <div>📆 연 나이: <strong>{ages.yearAge}세</strong></div>
+          <div>한국 나이: <strong>{ages.koreanAge}세</strong></div>
+          <div>만나이: <strong>{ages.internationalAge}세</strong></div>
+          <div>연 나이: <strong>{ages.yearAge}세</strong></div>
         </div>
       )}
     </div>
