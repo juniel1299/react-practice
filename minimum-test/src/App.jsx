@@ -1,51 +1,20 @@
+// 계단식 React Flow 트리 구조 구현
 import React, { useState, useCallback, useEffect } from 'react';
 import ReactFlow, {
-  useNodesState,
-  useEdgesState,
   Background,
   Controls,
   MiniMap,
-  MarkerType
+  MarkerType,
+  useNodesState,
+  useEdgesState
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
+const nodeWidth = 150;
+const nodeHeight = 60;
 const horizontalGap = 200;
 const verticalGap = 100;
 const maxPerRow = 4;
-const maxPerBlock = 8;
-
-// 가로 정렬 + 들여쓰기 + 4개 초과 시 줄바꿈, 8개 초과 시 블록당 y 보정
-function getIndentedHorizontalLayout(nodes) {
-  const levelMap = {};
-  nodes.forEach((node) => {
-    const level = node.data.level || 1;
-    if (!levelMap[level]) levelMap[level] = [];
-    levelMap[level].push(node);
-  });
-
-  const layoutedNodes = [];
-
-  Object.keys(levelMap).sort((a, b) => +a - +b).forEach((levelStr) => {
-    const level = parseInt(levelStr);
-    const group = levelMap[level];
-    group.forEach((node, index) => {
-      const blockIndex = Math.floor(index / maxPerBlock);
-      const rowInBlock = Math.floor((index % maxPerBlock) / maxPerRow);
-      const col = index % maxPerRow;
-      layoutedNodes.push({
-        ...node,
-        position: {
-          x: col * horizontalGap + (level - 1) * 100, // 들여쓰기 적용
-          y: (level - 1) * verticalGap + rowInBlock * 100 + blockIndex * 100, // 블록별 y 보정
-        },
-        //draggable: false,
-        selectable: false,
-      });
-    });
-  });
-
-  return layoutedNodes;
-}
 
 const rawNodes = [
   { id: '1', data: { label: '1단계', level: 1 } },
@@ -64,18 +33,31 @@ const rawNodes = [
   { id: '4-7', data: { label: '4-7', parent: '3-1', level: 4 } },
   { id: '4-8', data: { label: '4-8', parent: '3-1', level: 4 } },
   { id: '4-9', data: { label: '4-9', parent: '3-1', level: 4 } },
+  { id: '5-1', data: { label: '5-1', parent: '4-5', level: 5 } },
+  { id: '5-2', data: { label: '5-2', parent: '4-9', level: 5 } }
 ];
 
 const rawEdges = [
-  { id: 'e1-2-1', source: '1', target: '2-1' },
-  { id: 'e2-1-3-1', source: '2-1', target: '3-1' },
-  { id: 'e3-1-4-1', source: '3-1', target: '4-1' },
-].map((edge) => ({
+  { source: '1', target: '2-1' },
+  { source: '2-1', target: '3-1' },
+  { source: '3-1', target: '4-1' },
+  { source: '3-1', target: '4-2' },
+  { source: '3-1', target: '4-3' },
+  { source: '3-1', target: '4-4' },
+  { source: '3-1', target: '4-5' },
+  { source: '3-1', target: '4-6' },
+  { source: '3-1', target: '4-7' },
+  { source: '3-1', target: '4-8' },
+  { source: '3-1', target: '4-9' },
+  { source: '4-5', target: '5-1' },
+  { source: '4-9', target: '5-2' }
+].map((edge, index) => ({
+  id: `e${index}`,
   ...edge,
   type: 'step',
   sourcePosition: 'bottom',
   targetPosition: 'left',
-  markerEnd: { type: MarkerType.ArrowClosed },
+  markerEnd: { type: MarkerType.ArrowClosed }
 }));
 
 function FlowChart() {
@@ -83,67 +65,78 @@ function FlowChart() {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  const getDirectChildren = (id, level) => rawNodes.filter(
-    (n) => n.data.parent === id && n.data.level === level + 1
-  ).map((n) => n.id);
-
-  const getAllDescendants = (id) => {
-    const children = rawNodes.filter(n => n.data.parent === id).map(n => n.id);
-    const deeper = children.flatMap(getAllDescendants);
-    return [...children, ...deeper];
+  const getChildren = (id) => rawNodes.filter(n => n.data.parent === id);
+  const getDescendants = (id) => {
+    const children = getChildren(id);
+    return [...children, ...children.flatMap(c => getDescendants(c.id))];
   };
 
-  const toggleChildren = useCallback((node) => {
-    const nodeId = node.id;
-    const nodeLevel = node.data.level;
-    const nextLevel = nodeLevel + 1;
-
-    const isCollapsed = collapsedMap[nodeId];
-    const directChildren = getDirectChildren(nodeId, nodeLevel);
-    const allDescendants = getAllDescendants(nodeId);
-
-    let updatedNodes = nodes.map((n) => {
-      if (directChildren.includes(n.id)) {
-        return { ...n, hidden: !isCollapsed };
-      } else if (allDescendants.includes(n.id)) {
-        return { ...n, hidden: true };
-      }
-      return n;
+  const layoutNodes = (visibleIds) => {
+    const levelMap = {};
+    visibleIds.forEach(id => {
+      const node = rawNodes.find(n => n.id === id);
+      const level = node.data.level;
+      if (!levelMap[level]) levelMap[level] = [];
+      levelMap[level].push(node);
     });
 
-    rawNodes.forEach((raw) => {
-      if (directChildren.includes(raw.id) && !nodes.find(n => n.id === raw.id)) {
-        updatedNodes.push({ ...raw, hidden: false });
-      }
+    const positioned = [];
+    Object.keys(levelMap).sort((a, b) => +a - +b).forEach(levelStr => {
+      const level = +levelStr;
+      const group = levelMap[level];
+      group.forEach((node, index) => {
+        const row = Math.floor(index / maxPerRow);
+        const col = index % maxPerRow;
+        const isLeaf = !rawNodes.some(n => n.data.parent === node.id);
+        positioned.push({
+          ...node,
+          position: {
+            x: isLeaf ? col * horizontalGap + level * 100 : level * 200,
+            y: isLeaf ? (level - 1) * verticalGap + row * 100 : row * 120
+          },
+          //draggable: false
+        });
+      });
     });
+    return positioned;
+  };
 
-    const visibleIds = updatedNodes.filter(n => !n.hidden).map(n => n.id);
-    const visibleEdges = rawEdges.filter(e =>
-      visibleIds.includes(e.source) && visibleIds.includes(e.target)
-    );
-
-    const layouted = getIndentedHorizontalLayout(updatedNodes);
-    setNodes([...layouted]);
-    setEdges([...visibleEdges]);
-
-    setCollapsedMap((prev) => ({ ...prev, [nodeId]: !isCollapsed }));
-  }, [collapsedMap, nodes]);
+  const updateView = (collapsed) => {
+    const visible = new Set();
+    const visit = (node) => {
+      visible.add(node.id);
+      if (collapsed[node.id]) {
+        const children = getChildren(node.id);
+        children.forEach(visit);
+      }
+    };
+    visit(rawNodes[0]); // root = '1'
+    const visibleNodes = Array.from(visible);
+    setNodes(layoutNodes(visibleNodes));
+    setEdges(rawEdges.filter(e => visible.has(e.source) && visible.has(e.target)));
+  };
 
   const onNodeDoubleClick = useCallback((_, node) => {
-    const isLeaf = !rawNodes.some(n => n.data.parent === node.id);
-    if (isLeaf) return;
-    toggleChildren(node);
-  }, [toggleChildren]);
+    const isOpen = collapsedMap[node.id];
+    const newMap = { ...collapsedMap };
+
+    if (!isOpen) newMap[node.id] = true;
+    else {
+      newMap[node.id] = false;
+      getDescendants(node.id).forEach(d => newMap[d.id] = false);
+    }
+    setCollapsedMap(newMap);
+    updateView(newMap);
+  }, [collapsedMap]);
 
   useEffect(() => {
-    const level1 = rawNodes.filter(n => n.data.level === 1);
-    const layouted = getIndentedHorizontalLayout(level1);
-    setNodes([...layouted]);
-    setEdges([]);
+    const initial = { '1': true }; // open root
+    setCollapsedMap(initial);
+    updateView(initial);
   }, []);
 
   return (
-    <div style={{ width: '100%', height: '100vh' }}>
+    <div style={{ width: '100vw', height: '100vh' }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -152,12 +145,8 @@ function FlowChart() {
         onEdgesChange={onEdgesChange}
         //nodesDraggable={false}
         nodesConnectable={false}
-        elementsSelectable={false}
         fitView
       >
-        <Controls />
-        <MiniMap />
-        <Background />
       </ReactFlow>
     </div>
   );
