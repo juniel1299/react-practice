@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 
-const currentLocale = 'ko'; // 실제로는 context나 i18n에서 받아야 함
+const currentLocale = 'ko';
 
 const MultiLangModal = ({ visible, onClose, onSave, initialValues }) => {
   const [values, setValues] = useState(initialValues);
+
+  React.useEffect(() => {
+    setValues(initialValues); // 열릴 때마다 초기화
+  }, [initialValues]);
 
   const handleChange = (lang, val) => {
     setValues((prev) => ({ ...prev, [lang]: val }));
@@ -20,16 +24,13 @@ const MultiLangModal = ({ visible, onClose, onSave, initialValues }) => {
     <div className="modal-backdrop">
       <div className="modal-content">
         <label>
-          Korean:
-          <input value={values.ko} onChange={(e) => handleChange('ko', e.target.value)} />
+          Korean: <input value={values.ko} onChange={(e) => handleChange('ko', e.target.value)} />
         </label>
         <label>
-          English:
-          <input value={values.en} onChange={(e) => handleChange('en', e.target.value)} />
+          English: <input value={values.en} onChange={(e) => handleChange('en', e.target.value)} />
         </label>
         <label>
-          Chinese:
-          <input value={values.zh} onChange={(e) => handleChange('zh', e.target.value)} />
+          Chinese: <input value={values.zh} onChange={(e) => handleChange('zh', e.target.value)} />
         </label>
         <button onClick={handleSave}>저장 및 닫기</button>
         <button onClick={onClose}>취소</button>
@@ -57,45 +58,42 @@ const MultiLangModal = ({ visible, onClose, onSave, initialValues }) => {
   );
 };
 
+const MultilangInput = ({ id, valueMap = { ko: '', en: '', zh: '' }, onClickPop }) => {
+  return (
+    <input
+      id={id}
+      readOnly
+      value={valueMap[currentLocale]}
+      onClick={() => onClickPop(id, valueMap)}
+      style={{ display: 'block', marginBottom: '10px' }}
+    />
+  );
+};
+
 export default function App() {
   const [modalVisible, setModalVisible] = useState(false);
   const [currentInputId, setCurrentInputId] = useState(null);
+  const [tempValues, setTempValues] = useState({ ko: '', en: '', zh: '' });
   const [langValuesMap, setLangValuesMap] = useState({});
 
-  const openModal = (inputId) => {
-    setCurrentInputId(inputId);
-    const values = langValuesMap[inputId] || { ko: '', en: '', zh: '' };
-    setTempValues(values);
+  const onClickPop = (id, valueMap) => {
+    setCurrentInputId(id);
+    setTempValues(valueMap);
     setModalVisible(true);
   };
-
-  const [tempValues, setTempValues] = useState({ ko: '', en: '', zh: '' });
 
   const handleSave = (newValues) => {
     setLangValuesMap((prev) => ({
       ...prev,
       [currentInputId]: newValues,
     }));
-
-    const targetInput = document.getElementById(currentInputId);
-    if (targetInput) {
-      targetInput.value = newValues[currentLocale];
-    }
-  };
-
-  const handleClick = (e) => {
-    const target = e.target;
-    if (target.tagName === 'INPUT' && target.dataset.multilang === 'true') {
-      openModal(target.id);
-    }
   };
 
   return (
-    <div onClick={handleClick}>
-      {/* readOnly input들 (몇 개일지 모름) */}
-      <input id="title" data-multilang="true" readOnly placeholder="Click to edit" />
-      <input id="description" data-multilang="true" readOnly placeholder="Click to edit" />
-      <input id="memo" data-multilang="true" readOnly placeholder="Click to edit" />
+    <div>
+      <MultilangInput id="title" valueMap={langValuesMap.title} onClickPop={onClickPop} />
+      <MultilangInput id="description" valueMap={langValuesMap.description} onClickPop={onClickPop} />
+      <MultilangInput id="note" valueMap={langValuesMap.note} onClickPop={onClickPop} />
 
       <MultiLangModal
         visible={modalVisible}
