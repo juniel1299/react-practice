@@ -1,0 +1,74 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+/* 에디터 전체 배경 색상 */
+.toastui-editor-defaultUI {
+  background-color: #ffffff; /* 밝은 배경 */
+}
+
+/* 에디터 본문 입력 영역 배경 및 글자색 */
+.toastui-editor-contents {
+  background-color: #fff !important;
+  color: #000 !important;
+  text-align: left !important;  /* ✅ 왼쪽 정렬 */
+  font-size: 16px;
+}
+
+/* 툴바 배경색 */
+.toastui-editor-toolbar {
+  background-color: #f0f0f0 !important;
+}
+
+/* 마크다운 모드용 에디터 텍스트영역 */
+.toastui-editor-md-container {
+  background-color: #fff !important;
+}
+
+/* WYSIWYG 비활성화 시 이 영역도 가려질 수 있음 */
+.toastui-editor-ww-container {
+  background-color: #fff !important;
+}
+.toastui-editor-contents,
+.toastui-editor-md-container,
+.toastui-editor-md-container .toastui-editor {
+  text-align: left !important;
+}
